@@ -1,8 +1,8 @@
 import { useState } from 'react'
-
+import ReturnBook from './ReturnBook'
 export default function LibrarianDashboard({ librarian, onLogout }) {
   const [showConfirm, setShowConfirm] = useState(false)
-
+  const [showReturnPage, setShowReturnPage] = useState(false)
   const handleLogout = () => {
     localStorage.removeItem('librarianToken')
     localStorage.removeItem('librarianInfo')
@@ -18,6 +18,9 @@ export default function LibrarianDashboard({ librarian, onLogout }) {
     if (hour < 12) return '早上好'
     if (hour < 18) return '下午好'
     return '晚上好'
+  }
+  if (showReturnPage) {
+    return <ReturnBook onBack={() => setShowReturnPage(false)} />
   }
 
   return (
@@ -62,9 +65,11 @@ export default function LibrarianDashboard({ librarian, onLogout }) {
             <div className="text-4xl mb-4">📖</div>
             <h2 className="text-xl font-bold mb-2">图书管理</h2>
             <p className="text-gray-500 text-sm mb-4">添加、编辑、删除图书信息</p>
+            <button onClick={() => setShowReturn(true)}>图书归还管理</button>
             <button className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
               进入 →
             </button>
+            
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition">
