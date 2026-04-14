@@ -7,8 +7,8 @@ const cors = require('cors');
 // 1. 引入路由文件
 const booksRouter = require('./routes/books');
 const logsRouter = require('./routes/logs');
-const loansRouter = require('./routes/loans');
-const authRouter = require('./routes/auth'); // 新增：引入鉴权路由
+const loansRouter = require('./routes/loans'); // 你的借阅路由
+const authRouter = require('./routes/auth');   // 鉴权路由
 
 const app = express();
 const port = Number(process.env.PORT) || 3001;
@@ -22,15 +22,29 @@ app.get('/health', (req, res) => {
   res.json({ status: "ok", message: "Library API is running" });
 });
 
-// 2. 挂载路由
+// 2. 挂载路由 (合成了两边的要求)
+app.use('/api/auth', authRouter);           // 学生登录
+app.use('/api/librarian/auth', authRouter); // 馆员登录
+app.use('/api/books', booksRouter);
+app.use('/api/logs', logsRouter);
+app.use('/api/loans', loansRouter);         // 你的借阅历史入口
+
+// 兼容旧路径（保留队友的设置）
 app.use('/books', booksRouter);
 app.use('/logs', logsRouter);
 
-// 统一建议使用 /api 前缀，这样和你前端的代码就匹配上了
-app.use('/api/loans', loansRouter); 
-app.use('/api/auth', authRouter); // 新增：挂载鉴权路由到 /api/auth
+// 3. 错误处理 (保留队友新增的 404 和 500 处理)
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
+});
 
-// 关闭代码（保留）
+app.use((error, req, res, next) => {
+  console.error('Unhandled error:', error);
+  res.status(error?.statusCode || 500).json({
+    message: error?.message || 'Internal server error',
+  });
+});
+
 async function shutdown(signal) {
   console.log(`Received ${signal}, shutting down gracefully...`);
   await prisma.$disconnect();

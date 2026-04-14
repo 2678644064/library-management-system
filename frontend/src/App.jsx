@@ -1,12 +1,12 @@
-import MyHistory from './reader/MyHistory'; // 确保路径对应你刚才创建的文件夹
+import MyHistory from './reader/MyHistory';
+import BookSearch from './pages/BookSearch'; // 保留搜索组件
 import './App.css';
 
 function App() {
   return (
-    // min-h-screen 确保背景色铺满全屏，bg-slate-100 是浅灰色背景
     <div className="min-h-screen bg-slate-100">
       
-      {/* 顶部导航栏 - 这里可以根据喜好改颜色，比如 blue-700 */}
+      {/* 顶部导航栏 */}
       <nav className="bg-blue-700 text-white shadow-lg p-4 mb-8">
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center space-x-2">
@@ -22,15 +22,24 @@ function App() {
         </div>
       </nav>
 
-      {/* 主体内容区域 - 控制最大宽度并在中间显示 */}
-      <main className="container mx-auto px-4 max-w-5xl">
-        {/* 核心功能组件 */}
-        <MyHistory />
+      {/* 主体内容区域 - 把两个功能都放进去 */}
+      <main className="container mx-auto px-4 max-w-5xl space-y-12">
+        
+        {/* 1. 图书搜索功能 */}
+        <section>
+          <BookSearch />
+        </section>
+
+        {/* 2. 借阅历史功能 */}
+        <section>
+          <MyHistory />
+        </section>
+
       </main>
       
       {/* 页脚 */}
       <footer className="mt-20 py-6 border-t border-slate-200 text-center text-slate-400 text-xs">
-        &copy; {new Date().getFullYear()} 图书馆管理系统 - 借阅管理模块
+        &copy; {new Date().getFullYear()} 图书馆管理系统 - 读者服务模块
       </footer>
     </div>
   );

@@ -5,6 +5,8 @@ const { PrismaClient } = require('@prisma/client');
 // --- 关键：引入项目自带的 token 工具 ---
 const { signToken } = require('../lib/token'); 
 
+const { signLibrarianToken } = require('../lib/librarianToken');
+
 const router = express.Router();
 const prisma = new PrismaClient();
 
@@ -30,10 +32,9 @@ router.post('/login-student', async (req, res) => {
       return res.status(401).json({ error: '密码错误' });
     }
 
-    // 3. 生成 Token (使用项目自带的 signToken 函数)
-    // 注意：middleware/auth.js 要求 Number(payload.sub)，所以这里必须传 sub
+// 3. 生成 Token (使用项目自带的 signToken 函数)
     const token = signToken({
-      sub: String(user.id), // 中间件期待的标识符
+      sub: String(user.id), // 对应中间件的要求
       id: user.id,
       role: user.role
     });
