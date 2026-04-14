@@ -114,7 +114,7 @@ function BookSearch() {
           {books.length === 0 ? (
             <p>No books found</p>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
               {books.map((book) => (
                 <div key={book.id} style={{ border: '1px solid #ddd', borderRadius: '8px', padding: '15px', background: 'white' }}>
                   <h3 style={{ marginTop: 0, color: '#007bff' }}>{book.title}</h3>
@@ -127,6 +127,8 @@ function BookSearch() {
                       {book.available && book.availableCopies > 0 ? 'Available' : 'Borrowed'}
                     </span>
                   </p>
+                  {/* 库存显示 */}
+                  <p><strong>Stock:</strong> {book.availableCopies || 0} / {book.totalCopies || 1}</p>
                   {book.available && book.availableCopies > 0 && (
                     <button onClick={() => handleBorrow(book.id)} style={{ marginTop: '10px', padding: '6px 12px', background: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
                       Borrow
